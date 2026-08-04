@@ -1,0 +1,6 @@
+.DS_Store
+.env
+.env.*
+.labelgpt-cli/
+node_modules/
+*.log

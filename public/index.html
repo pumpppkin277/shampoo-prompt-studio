@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="上传洗发水商品图和卖点，生成可直接用于 C4.5 的完整成片提示词。" />
+    <title>成片 Prompt Studio · 洗发水</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="成片 Prompt Studio 首页">
+          <span class="brand-mark">水</span>
+          <span>成片 Prompt Studio</span>
+        </a>
+        <span class="category-pill">洗发水 · 场景口播 × 产品吸睛 × 使用演示</span>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <p class="eyebrow">SHAMPOO FILM PROMPT</p>
+          <h1 id="page-title">把一张商品图，<br />变成一条完整成片提示词。</h1>
+          <p class="lede">上传商品图，补充 5 项商品事实。系统会自动完成商品解析、场景选择、口播设计和 30 秒镜头编排。</p>
+        </section>
+
+        <div class="workspace">
+          <section class="panel input-panel" aria-labelledby="input-title">
+            <div class="panel-heading">
+              <span class="step">输入</span>
+              <div><h2 id="input-title">商品信息</h2><p>只填写客户确定的事实</p></div>
+            </div>
+
+            <form id="prompt-form">
+              <label class="upload" id="upload-box" for="product-image">
+                <input id="product-image" type="file" accept="image/png,image/jpeg,image/webp" required />
+                <span class="upload-icon">＋</span>
+                <span class="upload-copy"><strong>上传商品图</strong><small>PNG / JPG / WebP，建议正面清晰图</small></span>
+                <img id="preview" alt="商品图预览" hidden />
+                <button id="remove-image" class="remove-image" type="button" hidden>移除</button>
+              </label>
+
+              <div class="field-grid">
+                <label><span>商品名称</span><input name="productName" placeholder="例如：青少年清爽洗发水" required /></label>
+                <label><span>适用人群</span><input name="audience" placeholder="例如：运动后容易油塌的青少年" required /></label>
+                <label class="wide"><span>标准主痛点</span><select name="painPoint" required><option value="">请选择一个核心痛点</option><option>头皮出油、异味或发根扁塌</option><option>头屑、头痒或头皮敏感</option><option>毛躁、打结或易断</option></select></label>
+                <label class="wide"><span>核心卖点</span><textarea name="sellingPoint" rows="3" placeholder="只写客户能够确认的功效或产品事实" required></textarea></label>
+                <label class="wide"><span>商品质地</span><input name="texture" placeholder="例如：浅绿色透明啫喱，遇水形成细密泡沫" required /></label>
+              </div>
+
+              <p class="auto-note"><span>自动完成</span> 使用方法、生活场景、人物口播、镜头节奏与合规约束</p>
+              <button class="generate" id="generate-button" type="submit"><span>生成完整成片提示词</span><span aria-hidden="true">→</span></button>
+            </form>
+          </section>
+
+          <section class="panel output-panel" aria-labelledby="output-title">
+            <div class="panel-heading output-heading">
+              <span class="step">输出</span>
+              <div><h2 id="output-title">C4.5 完整成片 Prompt</h2><p>生成后可直接复制使用</p></div>
+              <button id="copy-button" class="copy" type="button" disabled>复制提示词</button>
+            </div>
+            <div class="output-body" id="output-body" aria-live="polite">
+              <div class="empty-state" id="empty-state">
+                <div class="liquid-orbit"><span></span><i></i></div>
+                <strong>等待生成</strong>
+                <p>完成左侧输入后，这里会出现一段带时间轴、镜头、口播、声音和一致性约束的中文提示词。</p>
+              </div>
+              <div class="loading-state" id="loading-state" hidden>
+                <div class="wave"><i></i><i></i><i></i><i></i></div>
+                <strong id="loading-title">正在解析商品图</strong>
+                <p>系统正在编排需求场景、产品特写与使用演示。</p>
+              </div>
+              <pre id="result" hidden></pre>
+              <div class="error" id="error" hidden></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
