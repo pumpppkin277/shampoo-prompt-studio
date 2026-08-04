@@ -39,6 +39,8 @@ h1 { margin: 0; font-family: "Futura", "Avenir Next", "Noto Sans SC", sans-serif
 .step { flex: 0 0 auto; width: 42px; height: 24px; border: 1px solid var(--line); color: var(--water-dark); border-radius: 999px; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
 
 form { padding: 24px; }
+.route-grid { display: grid; grid-template-columns: 1fr 1.45fr; gap: 14px; margin-bottom: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(135deg, rgba(217,244,240,.54), rgba(255,255,255,.92)); }
+.route-preview { grid-column: 1 / -1; margin: 0; padding-top: 12px; border-top: 1px solid rgba(0,127,149,.14); color: var(--muted); font-size: 12px; line-height: 1.55; }
 .upload { min-height: 158px; border: 1.5px dashed #9bc8d0; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 14px; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(217,244,240,.54), rgba(238,248,251,.78)); transition: border-color .2s, transform .2s; }
 .upload:hover { border-color: var(--water); transform: translateY(-1px); }
 .upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
@@ -96,6 +98,8 @@ input:focus, textarea:focus, select:focus { border-color: var(--water); box-shad
   .intro { padding: 48px 0 28px; }
   h1 { font-size: 39px; }
   .field-grid { grid-template-columns: 1fr; }
+  .route-grid { grid-template-columns: 1fr; }
+  .route-preview { grid-column: auto; }
   .wide { grid-column: auto; }
   .panel-heading { padding: 18px; }
   form, .output-body { padding: 18px; }

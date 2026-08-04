@@ -1,0 +1,4 @@
+interface:
+  display_name: "洗发水场景口播成片生成"
+  short_description: "解析商品图与卖点并生成可直接投喂Seedance 2.5的洗发水完整成片提示词"
+  default_prompt: "使用 $shampoo-scene-product-use-sd25，根据商品图和已确认卖点生成一段可直接投喂Seedance 2.5的30秒完整成片提示词。"

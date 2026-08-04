@@ -8,7 +8,15 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(ROOT, "public");
 const PORT = Number(process.env.PORT || 4317);
-const AGENT_ID = process.env.LABELGPT_AGENT_ID || "7670004447182864427";
+const AGENT_IDS = {
+  "shampoo:scene": process.env.LABELGPT_AGENT_SHAMPOO_SCENE || process.env.LABELGPT_AGENT_ID || "7670004447182864427",
+  "shampoo:pain": process.env.LABELGPT_AGENT_SHAMPOO_PAIN || "7670099946380591113",
+  "cream:scene": process.env.LABELGPT_AGENT_CREAM_SCENE || "7670101071544664110",
+  "cream:pain": process.env.LABELGPT_AGENT_CREAM_PAIN || "7670101101663830026",
+  "cleanser:scene": process.env.LABELGPT_AGENT_CLEANSER_SCENE || "7670101065483943946",
+  "cleanser:pain": process.env.LABELGPT_AGENT_CLEANSER_PAIN || "7670101041572249610",
+};
+const IMAGE_PARSER_AGENT_ID = process.env.LABELGPT_IMAGE_PARSER_AGENT || "7669651444601012234";
 const SPACE_ID = process.env.LABELGPT_SPACE_ID || "115";
 const LABELGPT_CLI = process.env.LABELGPT_CLI_PATH || path.join(homedir(), ".local/bin/labelgpt-cli");
 const LABELGPT_WORKDIR = process.env.LABELGPT_WORKDIR || path.join(homedir(), "Documents/临时任务");
@@ -120,6 +128,9 @@ function runCli(args) {
 function buildCustomerInfo(input) {
   const customerScript = String(input.customerScript || "").trim();
   return [
+    `商品类目：${input.categoryLabel}`,
+    `成片套路：${input.routineLabel}`,
+    `商品图专用解析结果：${input.productImageAnalysis}`,
     `商品名称：${input.productName}`,
     `适用人群：${input.audience}`,
     `标准主痛点：${input.painPoint}`,
@@ -127,6 +138,19 @@ function buildCustomerInfo(input) {
     `商品质地：${input.texture}`,
     `客户自有脚本：${customerScript || "未提供"}`,
   ].join("\n");
+}
+
+async function parseProductImage(imageUrl) {
+  const debugResult = await runCli([
+    "agent", "debug", "--id", IMAGE_PARSER_AGENT_ID,
+    "--input", JSON.stringify({ imagetest: imageUrl }),
+    "--space-id", SPACE_ID, "--format", "json",
+    "--wait-timeout", "10m", "--poll-interval", "2s", "--timeout", "1m",
+  ]);
+  const result = findResult(debugResult);
+  if (result) return result;
+  if (debugResult.timed_out) throw new Error("商品图解析超过 10 分钟，请稍后重试");
+  throw new Error("商品图解析完成，但没有读取到视觉结果");
 }
 
 function findResult(payload) {
@@ -158,13 +182,20 @@ function findResult(payload) {
 }
 
 async function generate(input) {
-  for (const key of ["productName", "audience", "painPoint", "sellingPoint", "texture", "imageDataUrl"]) {
+  for (const key of ["category", "routine", "productName", "audience", "painPoint", "sellingPoint", "texture", "imageDataUrl"]) {
     if (!String(input[key] || "").trim()) throw new Error("请完整填写商品信息并上传商品图");
   }
+  const agentId = AGENT_IDS[`${input.category}:${input.routine}`];
+  if (!agentId) throw new Error("暂不支持这个类目与成片套路组合");
+  const categoryLabels = { shampoo: "洗发水", cream: "面霜", cleanser: "洗面奶" };
+  const routineLabels = { scene: "需求场景演绎（口播）＋产品创意吸睛＋产品使用演示", pain: "痛点呈现＋功效机制可视化" };
+  input.categoryLabel = categoryLabels[input.category];
+  input.routineLabel = routineLabels[input.routine];
   const imageUrl = await uploadImage(input.imageDataUrl, input.imageName);
+  input.productImageAnalysis = await parseProductImage(imageUrl);
   const params = JSON.stringify({ userPrompt: buildCustomerInfo(input), imagetest: imageUrl });
   const debugResult = await runCli([
-    "agent", "debug", "--id", AGENT_ID,
+    "agent", "debug", "--id", agentId,
     "--input", params,
     "--space-id", SPACE_ID, "--format", "json",
     "--wait-timeout", "10m", "--poll-interval", "2s", "--timeout", "1m",
@@ -199,10 +230,10 @@ const server = http.createServer(async (req, res) => {
     }
     return;
   }
-  if (req.method === "GET" && req.url === "/api/health") return send(res, 200, { ok: true, agentId: AGENT_ID });
+  if (req.method === "GET" && req.url === "/api/health") return send(res, 200, { ok: true, imageParserAgent: IMAGE_PARSER_AGENT_ID, agents: AGENT_IDS });
   await serveStatic(req, res);
 });
 
 server.listen(PORT, "127.0.0.1", () => {
-  console.log(`洗发水成片 Prompt 工作台已启动：http://127.0.0.1:${PORT}`);
+  console.log(`分类目成片 Prompt 工作台已启动：http://127.0.0.1:${PORT}`);
 });

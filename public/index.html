@@ -3,25 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="上传洗发水商品图和卖点，生成可直接用于 Seedance 2.5 的完整成片提示词。" />
-    <title>成片 Prompt Studio · 洗发水</title>
+    <meta name="description" content="上传商品图和卖点，按类目与成片套路生成可直接用于 Seedance 2.5 的完整成片提示词。" />
+    <title>母婴个护成片 Prompt Studio</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <div class="shell">
       <header class="topbar">
         <a class="brand" href="#" aria-label="成片 Prompt Studio 首页">
-          <span class="brand-mark">水</span>
+          <span class="brand-mark">片</span>
           <span>成片 Prompt Studio</span>
         </a>
-        <span class="category-pill">洗发水 · 场景口播 × 产品吸睛 × 使用演示</span>
+        <span class="category-pill" id="route-pill">洗发水 · 场景口播 × 产品吸睛 × 使用演示</span>
       </header>
 
       <main>
         <section class="intro" aria-labelledby="page-title">
-          <p class="eyebrow">SHAMPOO FILM PROMPT</p>
+          <p class="eyebrow">PRODUCT-TO-FILM PROMPT</p>
           <h1 id="page-title">从一张商品图<br />到一条成片素材</h1>
-          <p class="lede">上传商品图，补充 5 项商品事实；如有自有脚本可直接粘贴。系统会先理解脚本，再完成商品解析和 30 秒镜头编排。</p>
+          <p class="lede">选择商品类目与成片套路，上传商品图并补充 5 项事实；如有自有脚本可直接粘贴。系统会融合脚本、解析商品，并生成可直接使用的 30 秒成片提示词。</p>
         </section>
 
         <div class="workspace">
@@ -32,6 +32,12 @@
             </div>
 
             <form id="prompt-form">
+              <div class="route-grid" aria-label="选择生成路线">
+                <label><span>商品类目</span><select name="category" id="category-select" required><option value="shampoo">洗发水</option><option value="cream">面霜</option><option value="cleanser">洗面奶</option></select></label>
+                <label><span>成片套路</span><select name="routine" id="routine-select" required><option value="scene">场景口播＋产品吸睛＋使用演示</option><option value="pain">痛点＋功效可视化</option></select></label>
+                <p class="route-preview" id="route-preview">从真实生活场景切入，完成商品创意露出、正确使用和自然结果。</p>
+              </div>
+
               <label class="upload" id="upload-box" for="product-image">
                 <input id="product-image" type="file" accept="image/png,image/jpeg,image/webp" required />
                 <span class="upload-icon">＋</span>
@@ -41,18 +47,18 @@
               </label>
 
               <div class="field-grid">
-                <label><span>商品名称</span><input name="productName" placeholder="例如：青少年清爽洗发水" required /></label>
-                <label><span>适用人群</span><input name="audience" placeholder="例如：运动后容易油塌的青少年" required /></label>
-                <label class="wide"><span>标准主痛点</span><select name="painPoint" required><option value="">请选择一个核心痛点</option><option>头皮出油、异味或发根扁塌</option><option>头屑、头痒或头皮敏感</option><option>毛躁、打结或易断</option></select></label>
+                <label><span>商品名称</span><input name="productName" id="product-name" placeholder="例如：青少年清爽洗发水" required /></label>
+                <label><span>适用人群</span><input name="audience" id="audience" placeholder="例如：运动后容易油塌的青少年" required /></label>
+                <label class="wide"><span>标准主痛点</span><select name="painPoint" id="pain-point" required></select></label>
                 <label class="wide"><span>核心卖点</span><textarea name="sellingPoint" rows="3" placeholder="只写客户能够确认的功效或产品事实" required></textarea></label>
-                <label class="wide"><span>商品质地</span><input name="texture" placeholder="例如：浅绿色透明啫喱，遇水形成细密泡沫" required /></label>
+                <label class="wide"><span>商品质地</span><input name="texture" id="texture" placeholder="例如：浅绿色透明啫喱，遇水形成细密泡沫" required /></label>
                 <label class="wide script-field">
                   <span>客户自有脚本 <small>可选</small></span>
                   <textarea name="customerScript" rows="6" maxlength="2000" placeholder="粘贴客户已有的口播或脚本。系统会保留核心表达并融合进30秒成片，不会简单附加在提示词末尾。"></textarea>
                 </label>
               </div>
 
-              <p class="auto-note"><span>自动完成</span> 脚本理解与压缩、使用方法、生活场景、镜头节奏与合规约束</p>
+              <p class="auto-note"><span>自动完成</span> 商品图解析、脚本理解与融合、类目动作、30秒镜头节奏与合规约束</p>
               <button class="generate" id="generate-button" type="submit"><span>生成完整成片提示词</span><span aria-hidden="true">→</span></button>
             </form>
           </section>

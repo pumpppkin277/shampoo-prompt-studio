@@ -1,0 +1,3 @@
+interface:
+  display_name: "洗面奶痛点功效可视化成片"
+  short_description: "将洗面奶商品事实编译为痛点机制类 Seedance 2.5 完整成片提示词"
