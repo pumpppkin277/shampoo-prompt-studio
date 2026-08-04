@@ -62,9 +62,9 @@ form.addEventListener("submit", async event => {
   data.imageName = imageInput.files?.[0]?.name || "product.png";
   generateButton.disabled = true;
   copyButton.disabled = true;
-  loadingTitle.textContent = "正在解析商品图";
+  loadingTitle.textContent = data.customerScript?.trim() ? "正在理解并融合客户脚本" : "正在解析商品图";
   setView("loading");
-  const titleTimer = setTimeout(() => (loadingTitle.textContent = "正在编排 30 秒成片"), 5000);
+  const titleTimer = setTimeout(() => (loadingTitle.textContent = "正在编排 30 秒成片"), 8000);
   try {
     const response = await fetch("/api/generate", {
       method: "POST",

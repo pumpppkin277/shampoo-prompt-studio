@@ -118,12 +118,14 @@ function runCli(args) {
 }
 
 function buildCustomerInfo(input) {
+  const customerScript = String(input.customerScript || "").trim();
   return [
     `商品名称：${input.productName}`,
     `适用人群：${input.audience}`,
     `标准主痛点：${input.painPoint}`,
     `核心卖点：${input.sellingPoint}`,
     `商品质地：${input.texture}`,
+    `客户自有脚本：${customerScript || "未提供"}`,
   ].join("\n");
 }
 
@@ -165,11 +167,11 @@ async function generate(input) {
     "agent", "debug", "--id", AGENT_ID,
     "--input", params,
     "--space-id", SPACE_ID, "--format", "json",
-    "--wait-timeout", "5m", "--poll-interval", "2s", "--timeout", "1m",
+    "--wait-timeout", "10m", "--poll-interval", "2s", "--timeout", "1m",
   ]);
   const result = findResult(debugResult);
   if (result) return { prompt: result, taskUuid: debugResult.debug_id || null };
-  if (debugResult.timed_out) throw new Error("生成时间超过 5 分钟，请稍后重试");
+  if (debugResult.timed_out) throw new Error("生成时间超过 10 分钟，请稍后重试");
   throw new Error("生成已完成，但没有读取到提示词，请检查 Agent 输出字段");
 }
 

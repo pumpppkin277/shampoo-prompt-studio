@@ -52,9 +52,11 @@ form { padding: 24px; }
 .field-grid { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 label { display: flex; flex-direction: column; gap: 8px; }
 label > span { font-size: 13px; font-weight: 700; }
+label > span small { margin-left: 6px; padding: 2px 7px; border-radius: 999px; color: var(--water-dark); background: var(--foam); font-size: 10px; font-weight: 750; }
 .wide { grid-column: 1 / -1; }
 input, textarea, select { width: 100%; border: 1px solid var(--line); background: #fbfdfe; border-radius: 12px; color: var(--ink); padding: 12px 13px; outline: none; transition: border-color .2s, box-shadow .2s; }
 textarea { resize: vertical; min-height: 82px; line-height: 1.55; }
+.script-field textarea { min-height: 132px; border-style: dashed; background: linear-gradient(180deg, #fbfdfe, rgba(217,244,240,.28)); }
 input:focus, textarea:focus, select:focus { border-color: var(--water); box-shadow: 0 0 0 3px rgba(0,127,149,.11); }
 ::placeholder { color: #9aacb5; }
 .auto-note { margin: 18px 0; padding: 11px 13px; border-radius: 11px; background: var(--foam); color: #3f6670; font-size: 12px; line-height: 1.55; }

@@ -21,7 +21,7 @@
         <section class="intro" aria-labelledby="page-title">
           <p class="eyebrow">SHAMPOO FILM PROMPT</p>
           <h1 id="page-title">把一张商品图，<br />变成一条完整成片提示词。</h1>
-          <p class="lede">上传商品图，补充 5 项商品事实。系统会自动完成商品解析、场景选择、口播设计和 30 秒镜头编排。</p>
+          <p class="lede">上传商品图，补充 5 项商品事实；如有自有脚本可直接粘贴。系统会先理解脚本，再完成商品解析和 30 秒镜头编排。</p>
         </section>
 
         <div class="workspace">
@@ -46,9 +46,13 @@
                 <label class="wide"><span>标准主痛点</span><select name="painPoint" required><option value="">请选择一个核心痛点</option><option>头皮出油、异味或发根扁塌</option><option>头屑、头痒或头皮敏感</option><option>毛躁、打结或易断</option></select></label>
                 <label class="wide"><span>核心卖点</span><textarea name="sellingPoint" rows="3" placeholder="只写客户能够确认的功效或产品事实" required></textarea></label>
                 <label class="wide"><span>商品质地</span><input name="texture" placeholder="例如：浅绿色透明啫喱，遇水形成细密泡沫" required /></label>
+                <label class="wide script-field">
+                  <span>客户自有脚本 <small>可选</small></span>
+                  <textarea name="customerScript" rows="6" maxlength="2000" placeholder="粘贴客户已有的口播或脚本。系统会保留核心表达并融合进30秒成片，不会简单附加在提示词末尾。"></textarea>
+                </label>
               </div>
 
-              <p class="auto-note"><span>自动完成</span> 使用方法、生活场景、人物口播、镜头节奏与合规约束</p>
+              <p class="auto-note"><span>自动完成</span> 脚本理解与压缩、使用方法、生活场景、镜头节奏与合规约束</p>
               <button class="generate" id="generate-button" type="submit"><span>生成完整成片提示词</span><span aria-hidden="true">→</span></button>
             </form>
           </section>
