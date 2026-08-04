@@ -134,7 +134,7 @@ function findResult(payload) {
     if (typeof executionResult === "string" && executionResult !== "null") {
       try {
         const parsed = JSON.parse(executionResult);
-        const prompt = parsed["C4.5完整成片Prompt"] || parsed.result || parsed.output;
+        const prompt = parsed["Seedance2.5完整成片Prompt"] || parsed["Seedance 2.5完整成片Prompt"] || parsed["C4.5完整成片Prompt"] || parsed.result || parsed.output;
         if (prompt) return prompt;
       } catch {
         if (executionResult.trim()) return executionResult;
@@ -147,12 +147,12 @@ function findResult(payload) {
   if (typeof output === "string") {
     try {
       const parsed = JSON.parse(output);
-      return parsed["C4.5完整成片Prompt"] || parsed.result || parsed.output || output;
+      return parsed["Seedance2.5完整成片Prompt"] || parsed["Seedance 2.5完整成片Prompt"] || parsed["C4.5完整成片Prompt"] || parsed.result || parsed.output || output;
     } catch {
       return output;
     }
   }
-  return output?.["C4.5完整成片Prompt"] || output?.result || output?.output || null;
+  return output?.["Seedance2.5完整成片Prompt"] || output?.["Seedance 2.5完整成片Prompt"] || output?.["C4.5完整成片Prompt"] || output?.result || output?.output || null;
 }
 
 async function generate(input) {
