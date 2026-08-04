@@ -24,6 +24,7 @@ npm start
 - `LABELGPT_SPACE_ID`：默认 `115`
 - `LABELGPT_SYNC_TOKEN`、`LABELGPT_SID`：服务端上传商品图所需凭证
 - `LABELGPT_CLI_PATH`、`LABELGPT_WORKDIR`：本地联调配置
+- `APP_ACCESS_USER`、`APP_ACCESS_PASSWORD`：可选的临时客户访问账号与密码；未配置密码时保持本地免登录
 
 当前后端先调用专用商品图反解析 Agent，得到包装视觉锚点与可读文字原文，再通过 `labelgpt-cli agent debug` 调用对应的“类目×套路” Agent。六套成片工作流都采用两层 PE：第一层接收专用图片解析结果并理解、融合客户脚本，第二层按对应类目与套路编译 Seedance 2.5 完整成片提示词。痛点机制套路会额外约束“一条痛点只对应一条有事实支持的机制”；证据不足时自动降级为真实质地、使用动作和有限结果。
 

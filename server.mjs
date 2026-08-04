@@ -20,6 +20,8 @@ const IMAGE_PARSER_AGENT_ID = process.env.LABELGPT_IMAGE_PARSER_AGENT || "766965
 const SPACE_ID = process.env.LABELGPT_SPACE_ID || "115";
 const LABELGPT_CLI = process.env.LABELGPT_CLI_PATH || path.join(homedir(), ".local/bin/labelgpt-cli");
 const LABELGPT_WORKDIR = process.env.LABELGPT_WORKDIR || path.join(homedir(), "Documents/临时任务");
+const ACCESS_USER = process.env.APP_ACCESS_USER || "customer";
+const ACCESS_PASSWORD = process.env.APP_ACCESS_PASSWORD || "";
 const MAX_BODY = 12 * 1024 * 1024;
 
 const mimeTypes = {
@@ -32,6 +34,28 @@ const mimeTypes = {
 function send(res, status, body, type = "application/json; charset=utf-8") {
   res.writeHead(status, { "Content-Type": type, "Cache-Control": "no-store" });
   res.end(typeof body === "string" || Buffer.isBuffer(body) ? body : JSON.stringify(body));
+}
+
+function hasAccess(req) {
+  if (!ACCESS_PASSWORD) return true;
+  const header = req.headers.authorization || "";
+  if (!header.startsWith("Basic ")) return false;
+  try {
+    const decoded = Buffer.from(header.slice(6), "base64").toString("utf8");
+    const separator = decoded.indexOf(":");
+    return separator >= 0 && decoded.slice(0, separator) === ACCESS_USER && decoded.slice(separator + 1) === ACCESS_PASSWORD;
+  } catch {
+    return false;
+  }
+}
+
+function requestAccess(res) {
+  res.writeHead(401, {
+    "Content-Type": "text/plain; charset=utf-8",
+    "Cache-Control": "no-store",
+    "WWW-Authenticate": 'Basic realm="Prompt Studio", charset="UTF-8"',
+  });
+  res.end("请输入试用账号和密码");
 }
 
 async function readJson(req) {
@@ -220,6 +244,7 @@ async function serveStatic(req, res) {
 }
 
 const server = http.createServer(async (req, res) => {
+  if (!hasAccess(req)) return requestAccess(res);
   if (req.method === "POST" && req.url === "/api/generate") {
     try {
       const input = await readJson(req);
